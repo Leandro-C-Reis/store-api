@@ -20,7 +20,8 @@ export class Users1614087473024 implements MigrationInterface {
                 },
                 {
                     name: "email",
-                    type: "varchar"
+                    type: "varchar",
+                    isUnique: true
                 },
                 {
                     name: "password",
