@@ -1,37 +1,16 @@
 import UserModel from '../models/Users';
-import { getRepository } from 'typeorm';
+import { getRepository, Repository } from 'typeorm';
+import IRepository from './IRepository';
 
-export default class UsersRepository {
-    repo;
+export default class UsersRepository extends IRepository {
+    repo: Repository<any>;
 
     constructor()
-    {
-        const repo = getRepository(UserModel);
-        this.repo = repo;
-    }   
-
-    public async getAll()
-    {
-        return this.repo.find();
-    }
-
-    public async getOne(id: number)
-    {
-        return this.repo.findOne(id);
-    }
-
-    public async create(params: any)
-    {
-        return this.repo.save(params);
-    }
-
-    public async update(params: any, id: number)
-    {
-        return this.repo.update(id, params);
-    }
-
-    public async delete(id: number)
-    {
-        return this.repo.delete(id);
+{
+        super()
+        {
+            const repo = getRepository(UserModel);
+            this.repo = repo;
+        }
     }
 }
