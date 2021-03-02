@@ -3,11 +3,12 @@
     "host": "localhost",
     "port": 3306,
     "username": "root",
-    "password": "****",
+    "password": "Econ#123",
     "database": "store",
-    "entities": ["./src/database/models/*.ts"],
-    "migrations": ["./src/database/migrations/*.ts"],
+    "entities": ["src/database/models/*.{ts,js}"],
+    "migrations": ["src/database/migrations/*.{ts,js}"],
     "cli": {
-        "migrationsDir": "./src/database/migrations"
+        "migrationsDir": "src/database/migrations",
+        "entitiesDir": "src/database/models"
     }
 }

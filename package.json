@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev src/server.ts --transpile-only --ignore-watch node-modules"
+    "dev": "ts-node-dev src/server.ts --transpile-only --ignore-watch node-modules",
+    "typeorm": "ts-node ./node_modules/typeorm/cli.js"
   },
   "repository": {
     "type": "git",
