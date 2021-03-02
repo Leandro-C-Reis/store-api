@@ -15,7 +15,7 @@ export default class IRepository {
 
     public async create(params: any)
     {
-        return this.repo.save(params);
+        return this.repo.insert(params);
     }
 
     public async update(params: any, id: number)
