@@ -17,14 +17,15 @@ export default class Users {
         return await users.getOne(id);
     }
 
-    public static async create(params: any)
+    public static async create(params: any) 
     {
         const users = new UsersRepository();
         
         const password_hashed = await password_hash(params.password);
         
         params.password = password_hashed;
-
+        params.created_at = this.timestamps();
+        
         return await users.create(params);
     }
 
@@ -34,6 +35,8 @@ export default class Users {
         {
             params.password = await password_hash(params.password);
         }
+
+        params.updated_at = this.timestamps();
 
         const users = new UsersRepository();
 
@@ -45,5 +48,12 @@ export default class Users {
         const users = new UsersRepository();
 
         return await users.delete(id);
+    }
+
+    protected static timestamps()
+    {
+        const date = new Date();
+
+        return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}*${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
     }
 }
