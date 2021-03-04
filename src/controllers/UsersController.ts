@@ -3,14 +3,14 @@ import UserService from '../services/Users';
 import Joi from 'joi';
 export default class UsersController {
 
-    public async index(request: Request, response: Response)
+    public static async index(request: Request, response: Response)
     {
         const users = await UserService.getAll();
 
         return response.status(200).json(users);
     }
 
-    public async show(request: Request, response: Response)
+    public static async show(request: Request, response: Response)
     {
         const id = parseInt(request.params.id);
 
@@ -27,7 +27,7 @@ export default class UsersController {
         return response.status(200).json(user);
     }
 
-    public async create(request: Request, response: Response)
+    public static async create(request: Request, response: Response)
     {
         const schema = Joi.object({
             name: Joi.string().required(),
@@ -50,7 +50,7 @@ export default class UsersController {
         return response.status(200).json({ user, status: 'SUCCESS' });
     }
 
-    public async update(request: Request, response: Response)
+    public static async update(request: Request, response: Response)
     {
         const id = parseInt(request.params.id);
 
@@ -83,7 +83,7 @@ export default class UsersController {
         return response.status(200).json(user);
     }
 
-    public async delete(request: Request, response: Response)
+    public static async delete(request: Request, response: Response)
     {
         const id = parseInt(request.params.id);
 

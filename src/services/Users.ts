@@ -1,5 +1,5 @@
 import UsersRepository from '../database/repositories/UsersRepository';
-import { password_hash } from 'nodejs-password';
+import { password_hash, password_verify } from 'nodejs-password';
 
 export default class Users {
 
@@ -48,6 +48,26 @@ export default class Users {
         const users = new UsersRepository();
 
         return await users.delete(id);
+    }
+
+    public static async verifyCredentials(email: string, password: string)
+    {
+        const users = new UsersRepository();
+        const user = await users.getByEmail(email);
+        
+        if (!user?.id)
+        {
+            return false;
+        }
+
+        const status = await password_verify(password, user.password);
+
+        if (!status)
+        {
+            return false;
+        }
+
+        return user.id;
     }
 
     protected static timestamps()
