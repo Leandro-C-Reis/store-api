@@ -1,3 +1,3 @@
 import connection from './connection';
 
-connection;
+connection();
