@@ -15,16 +15,22 @@ export default class AuthMiddleware {
         }
 
         let id: number = 0;
-        
+        let error: any;
+
         jwt.verify(token, 'SECRET', (err: any, decoded: any) => {
             if (err)
             {
-                return response.status(200).json({ message: err.message });
+                return error = err;
             }
 
             return id = decoded.id;
         });
-        
+
+        if (!id)
+        {
+            return response.status(200).json({ message: error.message });
+        }
+    
         const user = await Users.getOne(id);
         
         request.body.user = user;

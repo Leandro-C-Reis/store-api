@@ -1,6 +1,17 @@
-import { createConnection } from 'typeorm';
+
 import app from './app';
+import * as variables from './config/variables';
 
-createConnection();
+async function startServer() {
+    
+    if (!variables.port)
+    {
+        process.exit(1);
+    }
 
-app.listen(8000, () => console.log(`Listening on port: ${8000}`));
+    await require('./loaders');
+
+    app.listen(variables.port, () => console.log(`Listening on port: ${variables.port}`));
+}
+
+startServer();
