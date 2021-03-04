@@ -31,16 +31,22 @@ export default class AuthController {
             return response.send({ message: 'Token não recebido!' });
         }
 
-        let id;
+        let id = 0;
+        let error: any;
 
         jwt.verify(token, 'SECRET', (err: any, decoded: any) => {
             if (err)
             {
-                return response.send({ message: err.message })
+                return error = err;
             }
 
             return id = decoded.id;
         });
+
+        if (!id)
+        {
+            return response.send({ message: error.message })
+        }
 
         const newToken = jwt.sign({ id }, 'SECRET', {
             expiresIn: 3600
@@ -59,15 +65,21 @@ export default class AuthController {
         }
 
         let id: number = 0;
+        let error: any;
 
         jwt.verify(token, 'SECRET', (err: any, decoded: any) => {
             if (err)
             {
-                return response.send({ message: err.message })
+                return error = err;
             }
 
             return id = decoded.id;
         });
+
+        if (!id)
+        {
+            return response.send({ message: error.message })
+        }
 
         const user = await UserService.getOne(id);
 

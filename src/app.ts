@@ -1,12 +1,12 @@
 import express from 'express';
 import cors from 'cors';
 import routes from './routes';
-import methodOverride from 'method-override';
+import morgan from 'morgan';
 
 const app = express();
 
 app.use(cors());
-app.use(methodOverride());
+app.use(morgan('combined'));
 app.use(express.json());
 app.use(routes);
 
