@@ -1,7 +1,11 @@
 import { createConnection } from 'typeorm';
 import * as variables from '../config/variables';
+import path from 'path';
 
 const connection = async () => {
+    const modelsDir = path.resolve(__dirname, '..', 'database', 'models');
+    const migrationsDir = path.resolve(__dirname, '..', 'database', 'migrations');
+    
     const connect = await createConnection({
         type: 'mysql',
         host: variables.db_host,
@@ -9,11 +13,11 @@ const connection = async () => {
         database: variables.db_name,
         username: variables.db_user,
         password: variables.db_password,
-        entities: ["./src/database/models/*.{ts,js}"],
-        migrations: ["./src/database/migrations/*.{ts,js}"],
+        entities: [modelsDir + "/*.{ts,js}"],
+        migrations: [migrationsDir + "/*.{ts,js}"],
         cli: {
-            entitiesDir: "./src/database/models",
-            migrationsDir: "./src/database/migrations"
+            entitiesDir: modelsDir,
+            migrationsDir: migrationsDir
         }
     });
 

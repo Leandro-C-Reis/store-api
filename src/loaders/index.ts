@@ -1,3 +1,8 @@
 import connection from './connection';
 
-connection();
+async function load()
+{
+    await connection();
+}
+
+export default load();
