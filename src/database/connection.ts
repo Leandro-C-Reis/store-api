@@ -26,7 +26,9 @@ const connection = async () => {
         process.exit(1);
     }
     
-    console.log('ORM connection created');
+    console.log('ORM connection established');
+    
+    return connect;
 }   
 
 export default connection;

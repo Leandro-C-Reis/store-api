@@ -1,7 +1,8 @@
 import UsersRepository from '../database/repositories/UsersRepository';
 import { password_hash, password_verify } from 'nodejs-password';
+import IService from './IService';
 
-export default class Users {
+export default class Users extends IService{
 
     public static async getAll()
     {
@@ -68,12 +69,5 @@ export default class Users {
         }
 
         return user.id;
-    }
-
-    protected static timestamps()
-    {
-        const date = new Date();
-
-        return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}*${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
     }
 }
