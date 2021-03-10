@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import UserService from '../services/Users';
 import Joi from 'joi';
+
 export default class UsersController {
 
     public static async index(request: Request, response: Response)
@@ -45,6 +46,16 @@ export default class UsersController {
             });
         }
 
+        const exists = await UserService.exists(request.body.email);
+        
+        if (exists)
+        {
+            return response.status(200).json({
+                status: 'ERROR',
+                error: 'Este email já está cadastrado'
+            });
+        }
+
         const user = await UserService.create(request.body);
         
         return response.status(200).json({ user, status: 'SUCCESS' });
@@ -75,6 +86,16 @@ export default class UsersController {
             return response.status(200).json({
                 status: 'ERROR',
                 error: validate.error
+            });
+        }
+
+        const exists = await UserService.exists(request.body.email);
+        
+        if (exists)
+        {
+            return response.status(200).json({
+                status: 'ERROR',
+                error: 'Este email já está cadastrado'
             });
         }
 

@@ -70,4 +70,17 @@ export default class Users extends IService{
 
         return user.id;
     }
+
+    public static async exists(email: string)
+    {
+        const Users = new UsersRepository();
+        const user = await Users.getByEmail(email);
+
+        if (!user?.id)
+        {
+            return false;
+        }
+
+        return true;
+    }
 }

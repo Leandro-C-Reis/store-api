@@ -14,7 +14,7 @@ export default class UsersRepository extends IRepository {
         }
     }
 
-    public getByEmail(email: string)
+    public async getByEmail(email: string)
     {
         return this.repo.findOne({ where: { email }, select: ['password', 'id'] });
     }
