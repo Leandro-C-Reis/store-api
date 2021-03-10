@@ -25,9 +25,9 @@ users.delete('/users/delete/:id', UsersController.delete);
 
 // PRODUCTS ROUTES
 products.use('/products', AuthMiddleware.authenticate);
-products.get('/products'), ProductsController.index;
+products.get('/products', ProductsController.index);
 products.get('/products/:id', ProductsController.show);
-products.post('/products'), ProductsController.create;
+products.post('/products', ProductsController.create);
 products.post('/products/:id', ProductsController.update);
 products.delete('/products/delete/:id', ProductsController.delete);
 
