@@ -1,5 +1,6 @@
-import ProductsRepository from '../database/repositories/ProductsRepository';
 import IService from './IService';
+import ProductsRepository from '../database/repositories/ProductsRepository';
+import ProductInventoryRepository from '../database/repositories/ProductInventoryRepository';
 
 export default class Products extends IService {
     public static async getAll()
@@ -39,5 +40,24 @@ export default class Products extends IService {
         const products = new ProductsRepository();
 
         return await products.delete(id);
+    }
+
+    public static async createInventory(id: number, amount: number = 0)
+    {
+        const Inventory = new ProductInventoryRepository();
+
+        const inventory = await Inventory.create({
+            amount,
+            product: id
+        });
+
+        return inventory;
+    }
+
+    public static async updateInventory(id: number, amount: number = 0)
+    {
+        const Inventory = new ProductInventoryRepository();
+
+        return await Inventory.update({ amount }, id);
     }
 }

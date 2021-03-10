@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import Products from '../services/Products';
 import Joi from 'joi';
-
 export default class ProductsController {
 
     public static async index(request: Request, response: Response)
@@ -32,7 +31,8 @@ export default class ProductsController {
         const schema = Joi.object({
             name: Joi.string().required(),
             description: Joi.string().required().max(255),
-            value: Joi.number().required()
+            value: Joi.number().required(),
+            inventory: Joi.number().integer().optional()
         });
 
         const validate = schema.validate(request.body)
@@ -44,7 +44,11 @@ export default class ProductsController {
 
         const product = await Products.create(request.body);
 
-        return response.json(product);
+        const id = product.raw.insertId;
+
+        const inventory = await Products.createInventory(id, request.body.inventory);
+
+        return response.json({product, inventory});
     }
 
     public static async update(request: Request, response: Response)
@@ -61,7 +65,8 @@ export default class ProductsController {
         const schema = Joi.object({
             name: Joi.string(),
             description: Joi.string().max(255),
-            value: Joi.number()
+            value: Joi.number(),
+            inventory: Joi.number().integer().optional()
         });
 
         const validate = schema.validate(request.body)
@@ -69,6 +74,13 @@ export default class ProductsController {
         if (validate.error)
         {
             return response.json(validate.error);
+        }
+        
+        if (request.body.inventory)
+        {
+            await Products.updateInventory(id, request.body.inventory);
+            
+            delete request.body.inventory;
         }
 
         const updated = await Products.update(request.body, id);

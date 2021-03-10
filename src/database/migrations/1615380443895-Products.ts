@@ -21,7 +21,8 @@ export class Products1615380443895 implements MigrationInterface {
                 },
                 {
                     name: 'value',
-                    type: 'float'
+                    type: 'float',
+                    default: 0
                 },
                 {
                     name: 'description',
