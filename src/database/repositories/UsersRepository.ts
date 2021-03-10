@@ -6,7 +6,7 @@ export default class UsersRepository extends IRepository {
     repo: Repository<any>;
 
     constructor()
-{
+    {
         super()
         {
             const repo = getRepository(UserModel);

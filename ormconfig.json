@@ -1,0 +1,10 @@
+
+{
+    "type": "mysql",
+    "entities": ["src/database/models/*.{ts,js}"],
+    "migrations": ["src/database/migrations/*.{ts,js}"],
+    "cli": {
+        "migrationsDir": "src/database/migrations",
+        "entitiesDir": "src/database/models"
+    }
+}
