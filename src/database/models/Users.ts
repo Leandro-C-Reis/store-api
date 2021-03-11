@@ -1,4 +1,5 @@
-import {Entity, Column, PrimaryGeneratedColumn, Index, CreateDateColumn, UpdateDateColumn} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, Index, CreateDateColumn, UpdateDateColumn, OneToMany} from "typeorm";
+import Address from './Address';
 
 @Entity('users')
 export default class Users {
@@ -14,6 +15,9 @@ export default class Users {
 
     @Column({ select: false })
     password: string;
+
+    @OneToMany(() => Address, address => address.user)
+    addresses: Address[];
 
     @CreateDateColumn()
     created_at: string;
