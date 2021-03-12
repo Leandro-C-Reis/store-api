@@ -15,8 +15,8 @@ export class Orders1615490738998 implements MigrationInterface {
                     generationStrategy: 'increment'
                 },
                 {
-                    name: 'total_value',
-                    type: 'float',
+                    name: 'user_id',
+                    type: 'bigint',
                     unsigned: true
                 },
                 {
@@ -45,6 +45,13 @@ export class Orders1615490738998 implements MigrationInterface {
                 {
                     columnNames: ['address_id'],
                     referencedTableName: 'addresses',
+                    referencedColumnNames: ['id'],
+                    onDelete: 'cascade',
+                    onUpdate: 'cascade'
+                },
+                {
+                    columnNames: ['user_id'],
+                    referencedTableName: 'users',
                     referencedColumnNames: ['id'],
                     onDelete: 'cascade',
                     onUpdate: 'cascade'

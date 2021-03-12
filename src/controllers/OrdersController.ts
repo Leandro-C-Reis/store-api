@@ -31,7 +31,7 @@ export default class OrdersController {
 
         const schema = Joi.object({
             total_value: Joi.number().positive().required(),
-            amount: Joi.number().integer().positive().required(),
+            user_id: Joi.number().integer().positive().required(),
             address_id: Joi.number().integer().positive().required()
         });
 
@@ -59,9 +59,9 @@ export default class OrdersController {
         }
 
         const schema = Joi.object({
-            total_value: Joi.number().positive().required(),
-            amount: Joi.number().integer().positive().required(),
-            address_id: Joi.number().integer().positive().required()
+            total_value: Joi.number().positive(),
+            user_id: Joi.number().integer().positive(),
+            address_id: Joi.number().integer().positive()
         });
 
         const validate = schema.validate(request.body);

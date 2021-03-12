@@ -1,5 +1,6 @@
 import {Entity, Column, PrimaryGeneratedColumn, Index, CreateDateColumn, UpdateDateColumn, OneToMany} from "typeorm";
 import Address from './Addresses';
+import Order from './Orders';
 
 @Entity('users')
 export default class Users {
@@ -18,6 +19,9 @@ export default class Users {
 
     @OneToMany(() => Address, address => address.user)
     addresses: Address[];
+
+    @OneToMany(() => Order, order => order.user)
+    orders: Order[];
 
     @CreateDateColumn()
     created_at: string;
