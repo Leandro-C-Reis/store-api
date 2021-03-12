@@ -1,10 +1,10 @@
 import {MigrationInterface, QueryRunner, Table} from "typeorm";
 
-export class Orders1615490738998 implements MigrationInterface {
+export class ProductsOrders1615571816338 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(new Table({
-            name: 'orders',
+            name: 'products_orders',
             columns: [
                 {
                     name: "id",
@@ -15,53 +15,42 @@ export class Orders1615490738998 implements MigrationInterface {
                     generationStrategy: 'increment'
                 },
                 {
-                    name: 'user_id',
+                    name: 'product_id',
                     type: 'bigint',
                     unsigned: true
                 },
                 {
-                    name: 'total_value',
-                    type: 'float',
-                    unsigned: true
-                },
-                {
-                    name: 'address_id',
+                    name: 'order_id',
                     type: 'bigint',
                     unsigned: true
                 },
                 {
-                    name: 'created_at',
-                    type: 'timestamp',
-                    isNullable: true
-                },
-                {
-                    name: 'updated_at',
-                    type: 'timestamp',
-                    isNullable: true
+                    name:  'amount',
+                    type: 'int',
+                    unsigned: true
                 }
             ],
 
             foreignKeys: [
                 {
-                    columnNames: ['address_id'],
-                    referencedTableName: 'addresses',
+                    columnNames: ['product_id'],
+                    referencedTableName: 'products',
                     referencedColumnNames: ['id'],
                     onDelete: 'cascade',
                     onUpdate: 'cascade'
                 },
                 {
-                    columnNames: ['user_id'],
-                    referencedTableName: 'users',
+                    columnNames: ['order_id'],
+                    referencedTableName: 'orders',
                     referencedColumnNames: ['id'],
-                    onDelete: 'cascade',
-                    onUpdate: 'cascade'
+                    onUpdate: 'cascade',
+                    onDelete: 'cascade'
                 }
             ]
         }));
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable('orders');
     }
 
 }
