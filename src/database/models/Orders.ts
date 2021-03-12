@@ -1,12 +1,12 @@
-import {Entity, Column, PrimaryGeneratedColumn, PrimaryColumn, JoinColumn, OneToOne} from "typeorm";
-import Address from './Address';
+import {Entity, Column, PrimaryGeneratedColumn, JoinColumn, OneToOne} from "typeorm";
+import Address from './Addresses';
 
 @Entity('orders')
 export default class Orders {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
-    @PrimaryColumn()
+    @Column()
     address_id: number;
 
     @OneToOne(() => Address, address => address.order)

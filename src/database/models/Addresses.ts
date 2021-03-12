@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, PrimaryColumn, JoinColumn, OneToOne} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToOne} from "typeorm";
 import User from './Users';
 import Order from './Orders';
 
@@ -7,7 +7,7 @@ export default class Address {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
-    @PrimaryColumn()
+    @Column()
     user_id: number;
 
     @ManyToOne(() => User, user => user.addresses)

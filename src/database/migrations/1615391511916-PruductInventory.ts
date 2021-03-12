@@ -25,6 +25,16 @@ export class PruductInventory1615391511916 implements MigrationInterface {
                     type: 'bigint',
                     unsigned: true,
                     isUnique: true
+                },
+                {
+                    name: 'created_at',
+                    type: 'timestamp',
+                    isNullable: true
+                },
+                {
+                    name: 'updated_at',
+                    type: 'timestamp',
+                    isNullable: true
                 }
             ],
 

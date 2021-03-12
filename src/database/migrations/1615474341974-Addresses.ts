@@ -39,6 +39,16 @@ export class Addresses1615474341974 implements MigrationInterface {
                     name: 'user_id',
                     type: 'bigint',
                     unsigned: true
+                },
+                {
+                    name: 'created_at',
+                    type: 'timestamp',
+                    isNullable: true
+                },
+                {
+                    name: 'updated_at',
+                    type: 'timestamp',
+                    isNullable: true
                 }
             ],
 
