@@ -32,7 +32,11 @@ export default class OrdersController {
         const schema = Joi.object({
             total_value: Joi.number().positive().required(),
             user_id: Joi.number().integer().positive().required(),
-            address_id: Joi.number().integer().positive().required()
+            address_id: Joi.number().integer().positive().required(),
+            products: Joi.array().items({
+                id: Joi.number().integer().positive().required(),
+                amount: Joi.number().integer().required()
+            }).required()
         });
 
         const validate = schema.validate(request.body);
@@ -41,7 +45,7 @@ export default class OrdersController {
         {
             return response.json(validate.error);
         }
-
+        
         const created = await OrdersService.create(request.body);
 
         return response.json(created);
@@ -61,7 +65,11 @@ export default class OrdersController {
         const schema = Joi.object({
             total_value: Joi.number().positive(),
             user_id: Joi.number().integer().positive(),
-            address_id: Joi.number().integer().positive()
+            address_id: Joi.number().integer().positive(),
+            products: Joi.array().items({
+                id: Joi.number().integer().positive().required(),
+                amount: Joi.number().integer().required()
+            })
         });
 
         const validate = schema.validate(request.body);

@@ -14,4 +14,14 @@ export default class OrdersRepository extends IRepository{
             this.repo = repo;
         }
     }
+
+    async getAll()
+    {
+        return await this.repo.find({ relations: ['products', 'products.product'] });
+    }
+
+    async getOne(id: number)
+    {
+        return await this.repo.findOne(id, { relations: ['products', 'products.product'] });
+    }
 }

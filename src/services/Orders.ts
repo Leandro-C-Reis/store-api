@@ -1,4 +1,5 @@
 import OrdersRepository from '../database/repositories/OrdersRepository';
+import ProductsOrdersRepository from '../database/repositories/ProductsOrdersRepository';
 import IService from './IService';
 
 export default class Orders extends IService{
@@ -20,10 +21,27 @@ export default class Orders extends IService{
     public static async create(params: any) 
     {
         const orders = new OrdersRepository();
+        const products: Array<any> = params.products;
+        
+        delete params.products;
         
         params.created_at = this.timestamps();
-        
-        return await orders.create(params);
+
+        const order = await orders.create(params);
+
+        const order_id = order.raw.insertId;
+        const productsOrders = new ProductsOrdersRepository();
+
+        for await (let product of products)
+        {
+            await productsOrders.create({
+                order_id,
+                product_id: product.id,
+                amount: product.amount,
+            });
+        }
+
+        return order;
     }
 
     public static async update(params: any, id: number)
