@@ -36,7 +36,7 @@ export default class OrdersController {
             products: Joi.array().items({
                 id: Joi.number().integer().positive().required(),
                 amount: Joi.number().integer().required()
-            }).required()
+            }).required().min(1)
         });
 
         const validate = schema.validate(request.body);
@@ -46,6 +46,23 @@ export default class OrdersController {
             return response.json(validate.error);
         }
         
+        const existProducts = await OrdersService.existProducts(request.body.products);
+
+        if (!existProducts)
+        {
+            return response.json({ ERROR: 'Erro ao buscar produto.' })
+        }
+
+        const validateQuantity = await OrdersService.validateQuantity(request.body.products);
+
+        if (validateQuantity.length > 0)
+        {
+            return response.json({ 
+                Error: 'Estoque indisponível!',
+                products: validateQuantity
+            });
+        }
+
         const created = await OrdersService.create(request.body);
 
         return response.json(created);
@@ -77,6 +94,23 @@ export default class OrdersController {
         if (validate.error)
         {
             return response.json(validate.error);
+        }
+
+        const existProducts = await OrdersService.existProducts(request.body.products);
+
+        if (!existProducts)
+        {
+            return response.json({ ERROR: 'Erro ao buscar produto.' })
+        }
+
+        const validateQuantity = await OrdersService.validateQuantity(request.body.products);
+
+        if (validateQuantity.length > 0)
+        {
+            return response.json({ 
+                Error: 'Estoque indisponível!',
+                products: validateQuantity
+            });
         }
 
         const updated = await OrdersService.update(request.body, id);

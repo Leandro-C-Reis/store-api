@@ -1,6 +1,9 @@
 import OrdersRepository from '../database/repositories/OrdersRepository';
+import ProductsRepository from '../database/repositories/ProductsRepository';
 import ProductsOrdersRepository from '../database/repositories/ProductsOrdersRepository';
+import InventoryRepository from '../database/repositories/ProductInventoryRepository';
 import IService from './IService';
+import * as Types from '../types/types';
 
 export default class Orders extends IService{
 
@@ -18,19 +21,21 @@ export default class Orders extends IService{
         return await orders.getOne(id);
     }
 
-    public static async create(params: any) 
+    public static async create(params: Types.Order) 
     {
         const orders = new OrdersRepository();
-        const products: Array<any> = params.products;
+        const products: [Types.product] | [] = params.products || [];
         
         delete params.products;
         
         params.created_at = this.timestamps();
-
+        
         const order = await orders.create(params);
-
         const order_id = order.raw.insertId;
+
         const productsOrders = new ProductsOrdersRepository();
+        const inventory = new InventoryRepository();
+        const productRepo = new ProductsRepository();
 
         for await (let product of products)
         {
@@ -39,8 +44,14 @@ export default class Orders extends IService{
                 product_id: product.id,
                 amount: product.amount,
             });
-        }
 
+            const PRODUCT: Types.Product = await productRepo.getOne(product.id);
+
+            await inventory.update({
+                amount: PRODUCT.inventory.amount - product.amount
+            }, product.id);
+        }
+        
         return order;
     }
 
@@ -58,5 +69,41 @@ export default class Orders extends IService{
         const orders = new OrdersRepository();
 
         return await orders.delete(id);
+    }
+
+    public static async existProducts(products: [Types.product])
+    {
+        const Repo = new ProductsRepository();
+
+        for await (const product of products)
+        {
+            const find = await Repo.getOne(product.id);
+            
+            if (!find)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static async validateQuantity(products: [Types.product])
+    {
+        const Repo = new ProductsRepository();
+
+        const errors = [];
+
+        for await (const req of products)
+        {
+            const product: Types.Product = await Repo.getOne(req.id);
+
+            if (req.amount > product.inventory.amount)
+            {
+                errors.push(req);
+            }
+        }
+
+        return errors;
     }
 }
