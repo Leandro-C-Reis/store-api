@@ -21,22 +21,25 @@ export default class Orders extends IService{
         return await orders.getOne(id);
     }
 
-    public static async create(params: Types.Order) 
+    public static async create(params: Types.order) 
     {
-        const orders = new OrdersRepository();
+        // instance objects
+        const orders         = new OrdersRepository();
+        const productsOrders = new ProductsOrdersRepository();
+        const inventory      = new InventoryRepository();
+        const productRepo    = new ProductsRepository();
+
+        // extract object
         const products: [Types.product] | [] = params.products || [];
-        
         delete params.products;
         
         params.created_at = this.timestamps();
         
+        // create order and get id;
         const order = await orders.create(params);
         const order_id = order.raw.insertId;
-
-        const productsOrders = new ProductsOrdersRepository();
-        const inventory = new InventoryRepository();
-        const productRepo = new ProductsRepository();
-
+    
+        // create relationship and update inventory
         for await (let product of products)
         {
             await productsOrders.create({
@@ -105,5 +108,20 @@ export default class Orders extends IService{
         }
 
         return errors;
+    }
+
+    public static async cancelOrder(id: number)
+    {
+        const orders         = new OrdersRepository();
+        const productsOrders = new ProductsOrdersRepository();
+        const inventory      = new InventoryRepository();
+        const productRepo    = new ProductsRepository();
+
+        const order: Types.Order = await orders.getOne(id);
+        
+        for await(const productOrder of order.products)
+        {
+            await inventory.update({ amount: productOrder.amount }, productOrder.product.id);
+        }
     }
 }

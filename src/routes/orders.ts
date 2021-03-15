@@ -9,6 +9,7 @@ router.get('/', OrdersController.index);
 router.get('/:id', OrdersController.show);
 router.post('/', OrdersController.create);
 router.post('/:id', OrdersController.update);
+router.post('/cancel/:id', OrdersController.cancel);
 router.delete('/delete/:id', OrdersController.delete);
 
 export default router;

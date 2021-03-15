@@ -131,4 +131,18 @@ export default class OrdersController {
 
         return response.json(deleted);
     }
+
+    public static async cancel(request: Request, response: Response)
+    {
+        const id = parseInt(request.params.id);
+
+        if (!id)
+        {
+            return response.json({ error: "ID inválido!" });
+        }
+
+        await OrdersService.cancelOrder(id);
+
+        return response.json({ message: 'Pedido cancelado!' });
+    }
 }

@@ -4,18 +4,18 @@ export interface product {
     amount: number;
 }
 
-export interface Order {
+export interface order {
     total_value: number;
     address_id: number;
     user_id: number;
-    products?: [products];
+    products?: [product];
 
     created_at?: string;
     updated_at?: string;
 }
 
 export interface Product {
-    id: number | string;
+    id: number;
     name: string;
     value: number;
     description: string;
@@ -25,4 +25,13 @@ export interface Product {
         id: number | string;
         amount: number;
     }
+}
+
+export interface Order extends order{
+    id: number;
+    products: [{
+        id: number;
+        amount: number;
+        product: Product;   
+    }];
 }
