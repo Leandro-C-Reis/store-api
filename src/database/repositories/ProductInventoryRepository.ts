@@ -16,8 +16,13 @@ export default class ProductsRepository extends IRepository {
 
     async update(params: any, id: number)
     {
-        const inventory = await this.repo.findOne({ where: { product: id } });
+        const inventory = await this.getByProductId(id);
         
         return await this.repo.update(inventory.id, params);
+    }
+
+    async getByProductId(id: number)
+    {
+        return await this.repo.findOne({ where: { product: id } });
     }
 }

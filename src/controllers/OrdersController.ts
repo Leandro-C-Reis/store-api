@@ -149,6 +149,18 @@ export default class OrdersController {
             return response.json({ error: "ID inválido!" });
         }
 
+        const find = await OrdersService.getOne(id);
+
+        if (!find)
+        {
+            return response.json({ Error: "Pedido não encontrado!" });
+        }
+
+        if (!find.is_active)
+        {
+            return response.json({ Error: "Pedido já foi cancelado!" });
+        }
+
         await OrdersService.cancelOrder(id);
 
         return response.json({ message: 'Pedido cancelado!' });

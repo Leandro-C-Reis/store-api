@@ -18,7 +18,8 @@ export default class Orders extends IService{
     {
         const orders = new OrdersRepository();
 
-        return await orders.getOne(id);
+        const order: Types.Order = await orders.getOne(id);
+        return order;
     }
 
     public static async create(params: Types.order) 
@@ -120,7 +121,8 @@ export default class Orders extends IService{
         
         for await(const productOrder of order.products)
         {
-            await inventory.update({ amount: productOrder.amount }, productOrder.product.id);
+            const productInventory: Types.Inventory = await inventory.getByProductId(productOrder.product.id);
+            await inventory.update({ amount: productOrder.amount + productInventory.amount }, productOrder.product.id);
         }
 
         await orders.update({ is_active: false }, id);

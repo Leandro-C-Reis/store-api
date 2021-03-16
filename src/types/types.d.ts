@@ -14,6 +14,11 @@ export interface order {
     updated_at?: string;
 }
 
+export interface Inventory {
+    id: number;
+    amount: number;
+}
+
 export interface Product {
     id: number;
     name: string;
@@ -21,14 +26,12 @@ export interface Product {
     description: string;
     created_at: string | null;
     updated_at: string | null;
-    inventory: {
-        id: number | string;
-        amount: number;
-    }
+    inventory: Inventory;
 }
 
 export interface Order extends order{
     id: number;
+    is_active: boolean;
     products: [{
         id: number;
         amount: number;
