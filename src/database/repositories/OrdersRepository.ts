@@ -15,11 +15,6 @@ export default class OrdersRepository extends IRepository{
         }
     }
 
-    async getAll()
-    {
-        return await this.repo.find({ relations: ['products', 'products.product'] });
-    }
-
     async getOne(id: number)
     {
         return await this.repo.findOne(id, { relations: ['products', 'products.product'] });
@@ -28,5 +23,10 @@ export default class OrdersRepository extends IRepository{
     async getAllActives()
     {
         return await this.repo.find({ where: { is_active: true } });
+    }
+
+    async getByUser(id: number)
+    {
+        return await this.repo.find({ where: { user_id: id } });
     }
 }

@@ -30,4 +30,10 @@ export default class Orders {
 
     @Column()
     is_active: boolean;
+
+    @Column()
+    created_at: string;
+
+    @Column()
+    updated_at: string;
 }

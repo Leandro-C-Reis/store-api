@@ -125,13 +125,20 @@ export default class Orders extends IService{
             await inventory.update({ amount: productOrder.amount + productInventory.amount }, productOrder.product.id);
         }
 
-        await orders.update({ is_active: false }, id);
+        await orders.update({ is_active: false, updated_at: this.timestamps() }, id);
     }
 
     public static async getAllActives()
     {
         const orders = new OrdersRepository();
         
-        return orders.getAllActives();
+        return await orders.getAllActives();
+    }
+
+    public static async getByUser(id: number)
+    {
+        const orders = new OrdersRepository();
+
+        return await orders.getByUser(id);
     }
 }

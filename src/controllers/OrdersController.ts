@@ -172,4 +172,18 @@ export default class OrdersController {
 
         return response.json(orders);
     }
+
+    public static async user(request: Request, response: Response)
+    {
+        const id = parseInt(request.params.id);
+
+        if (!id)
+        {
+            return response.json({ error: "ID inválido!" });
+        }
+
+        const orders = await OrdersService.getByUser(id);
+
+        return response.json(orders);
+    }
 }
