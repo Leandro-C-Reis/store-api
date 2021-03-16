@@ -7,6 +7,7 @@ const router = express();
 router.use('/', AuthMiddleware.authenticate);
 router.get('/', OrdersController.index);
 router.get('/:id', OrdersController.show);
+router.get('/list/actives', OrdersController.actives);
 router.post('/', OrdersController.create);
 router.post('/:id', OrdersController.update);
 router.post('/cancel/:id', OrdersController.cancel);

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import Joi from 'joi';
 import OrdersService from '../services/Orders';
+import AddressService from '../services/Address';
 
 export default class OrdersController {
 
@@ -50,7 +51,7 @@ export default class OrdersController {
 
         if (!existProducts)
         {
-            return response.json({ ERROR: 'Erro ao buscar produto.' })
+            return response.json({ Error: 'Erro ao buscar produto.' })
         }
 
         const validateQuantity = await OrdersService.validateQuantity(request.body.products);
@@ -61,6 +62,13 @@ export default class OrdersController {
                 Error: 'Estoque indisponível!',
                 products: validateQuantity
             });
+        }
+
+        const validateAddress = await AddressService.validate(request.body.address_id);
+        
+        if (!validateAddress)
+        {
+            return response.json({ Error: "Endereço não encontrado!" });
         }
 
         const created = await OrdersService.create(request.body);
@@ -144,5 +152,12 @@ export default class OrdersController {
         await OrdersService.cancelOrder(id);
 
         return response.json({ message: 'Pedido cancelado!' });
+    }
+
+    public static async actives(request: Request, response: Response)
+    {
+        const orders = await OrdersService.getAllActives();
+
+        return response.json(orders);
     }
 }

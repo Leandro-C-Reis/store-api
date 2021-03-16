@@ -24,4 +24,9 @@ export default class OrdersRepository extends IRepository{
     {
         return await this.repo.findOne(id, { relations: ['products', 'products.product'] });
     }
+
+    async getAllActives()
+    {
+        return await this.repo.find({ where: { is_active: true } });
+    }
 }

@@ -38,6 +38,11 @@ export class Orders1615490738998 implements MigrationInterface {
                     name: 'updated_at',
                     type: 'timestamp',
                     isNullable: true
+                },
+                {
+                    name: 'is_active',
+                    type: 'boolean',
+                    default: true
                 }
             ],
 

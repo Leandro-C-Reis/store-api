@@ -47,7 +47,8 @@ export default class Orders extends IService{
                 product_id: product.id,
                 amount: product.amount,
             });
-
+            
+            console.log('aqui')
             const PRODUCT: Types.Product = await productRepo.getOne(product.id);
 
             await inventory.update({
@@ -113,15 +114,22 @@ export default class Orders extends IService{
     public static async cancelOrder(id: number)
     {
         const orders         = new OrdersRepository();
-        const productsOrders = new ProductsOrdersRepository();
         const inventory      = new InventoryRepository();
-        const productRepo    = new ProductsRepository();
-
+        
         const order: Types.Order = await orders.getOne(id);
         
         for await(const productOrder of order.products)
         {
             await inventory.update({ amount: productOrder.amount }, productOrder.product.id);
         }
+
+        await orders.update({ is_active: false }, id);
+    }
+
+    public static async getAllActives()
+    {
+        const orders = new OrdersRepository();
+        
+        return orders.getAllActives();
     }
 }

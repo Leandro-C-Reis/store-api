@@ -27,4 +27,7 @@ export default class Orders {
     
     @Column()
     total_value: number;
+
+    @Column()
+    is_active: boolean;
 }

@@ -41,4 +41,18 @@ export default class Address extends IService{
 
         return await addresses.delete(id);
     }
+
+    public static async validate(id: number)
+    {
+        const addresses = new AddressRepository();
+
+        const find = await addresses.getOne(id);
+        
+        if (!find)
+        {
+            return false;
+        }
+
+        return true;
+    }
 }
