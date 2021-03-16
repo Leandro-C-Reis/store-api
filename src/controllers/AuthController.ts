@@ -1,6 +1,7 @@
-import { Request, response, Response } from 'express';
+import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import UserService from '../services/Users';
+import * as VAR from '../config/variables';
 
 export default class AuthController {
 
@@ -15,7 +16,7 @@ export default class AuthController {
             return response.status(200).json({ message: 'Email ou senha inválido!'});
         }
 
-        const token = jwt.sign({ id }, 'SECRET', {
+        const token = jwt.sign({ id }, VAR.jwt_secret, {
             expiresIn: 3600
         });
 
@@ -34,7 +35,7 @@ export default class AuthController {
         let id = 0;
         let error: any;
 
-        jwt.verify(token, 'SECRET', (err: any, decoded: any) => {
+        jwt.verify(token, VAR.jwt_secret, (err: any, decoded: any) => {
             if (err)
             {
                 return error = err;
@@ -48,7 +49,7 @@ export default class AuthController {
             return response.send({ message: error.message })
         }
 
-        const newToken = jwt.sign({ id }, 'SECRET', {
+        const newToken = jwt.sign({ id }, VAR.jwt_secret, {
             expiresIn: 3600
         });
 
@@ -67,7 +68,7 @@ export default class AuthController {
         let id: number = 0;
         let error: any;
 
-        jwt.verify(token, 'SECRET', (err: any, decoded: any) => {
+        jwt.verify(token, VAR.jwt_secret, (err: any, decoded: any) => {
             if (err)
             {
                 return error = err;

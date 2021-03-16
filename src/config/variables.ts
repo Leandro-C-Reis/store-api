@@ -11,6 +11,8 @@ export const db_name = process.env.DB_NAME;
 export const db_user = process.env.DB_USER;
 export const db_password = process.env.DB_PASSWORD;
 
+export const jwt_secret = process.env.JWT_SECRET || 'SECRET';
+
 export const consoleColors = {
     Reset: "\x1b[0m",
     Bright: "\x1b[1m",
