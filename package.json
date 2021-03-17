@@ -43,7 +43,7 @@
     "joi": "^17.4.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
-    "mysql": "^2.18.1",
+    "mysql2": "^2.18.1",
     "nodejs-password": "^1.0.2",
     "typeorm": "^0.2.31"
   }
