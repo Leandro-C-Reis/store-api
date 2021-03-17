@@ -29,7 +29,7 @@ export default class ProductsController {
         delete request.body.user;
 
         const schema = Joi.object({
-            name: Joi.string().required(),
+            title: Joi.string().required(),
             description: Joi.string().required().max(255),
             value: Joi.number().required(),
             inventory: Joi.number().integer().optional()
@@ -63,7 +63,7 @@ export default class ProductsController {
         }
 
         const schema = Joi.object({
-            name: Joi.string(),
+            title: Joi.string(),
             description: Joi.string().max(255),
             value: Joi.number(),
             inventory: Joi.number().integer().optional()

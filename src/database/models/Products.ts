@@ -8,7 +8,7 @@ export default class Products {
     id: number;
 
     @Column()
-    name: string;
+    title: string;
 
     @Column()
     value: number;

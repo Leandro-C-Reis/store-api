@@ -16,7 +16,7 @@ export class Products1615380443895 implements MigrationInterface {
                     generationStrategy: 'increment'
                 },
                 {
-                    name: 'name',
+                    name: 'title',
                     type: 'varchar'
                 },
                 {
