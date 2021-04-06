@@ -15,7 +15,7 @@ export class Addresses1615474341974 implements MigrationInterface {
                     generationStrategy: 'increment'
                 },
                 {
-                    name: 'cep',
+                    name: 'zip_code',
                     type: 'varchar'
                 },
                 {

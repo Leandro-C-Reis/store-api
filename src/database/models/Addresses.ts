@@ -18,7 +18,7 @@ export default class Address {
     order: Order;
     
     @Column()
-    cep: string;
+    zip_code: string;
     
     @Column()
     city: string;

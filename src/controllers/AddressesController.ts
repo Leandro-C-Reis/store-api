@@ -30,7 +30,7 @@ export default class AddressController {
         delete request.body.user;
 
         const schema = Joi.object({
-            cep: Joi.string().required().length(8),
+            zip_code: Joi.string().required().length(8),
             city: Joi.string().required(),
             street: Joi.string().required(),
             district: Joi.string().required(),  
@@ -62,7 +62,7 @@ export default class AddressController {
         }
 
         const schema = Joi.object({
-            cep: Joi.string().length(8),
+            zip_code: Joi.string().length(8),
             city: Joi.string(),
             street: Joi.string(),
             district: Joi.string(),  
