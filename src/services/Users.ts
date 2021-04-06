@@ -68,7 +68,9 @@ export default class Users extends IService{
             return false;
         }
 
-        return user.id;
+        delete user.password;
+
+        return user;
     }
 
     public static async exists(email: string)

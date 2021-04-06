@@ -4,23 +4,25 @@ import UserService from '../services/Users';
 import * as VAR from '../config/variables';
 
 export default class AuthController {
-
+    
     public static async login(request: Request, response: Response)
     {
+        const ExpiresIn = 3600;
+
         const { email, password } = request.body;
+        
+        const user = await UserService.verifyCredentials(email, password);
 
-        const id = await UserService.verifyCredentials(email, password);
-
-        if (!id)
+        if (!user)
         {
             return response.status(200).json({ message: 'Email ou senha inválido!'});
         }
 
-        const token = jwt.sign({ id }, VAR.jwt_secret, {
-            expiresIn: 3600
+        const token = jwt.sign({ user }, VAR.jwt_secret, {
+            expiresIn: ExpiresIn
         });
 
-        return response.status(200).json({ token, expires_id: 3600 });
+        return response.status(200).json({ user, token, expires_in: ExpiresIn });
     }
 
     public static async refresh(request: Request, response: Response)
