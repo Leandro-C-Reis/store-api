@@ -23,7 +23,7 @@ export default class AuthMiddleware {
                 return error = err;
             }
 
-            return id = decoded.id;
+            return id = decoded.user.id;
         });
 
         if (!id)
