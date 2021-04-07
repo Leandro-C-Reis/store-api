@@ -15,7 +15,7 @@ export interface order {
 }
 
 export interface Inventory {
-    id: number;
+    id?: number;
     amount: number;
 }
 
@@ -27,6 +27,13 @@ export interface Product {
     created_at: string | null;
     updated_at: string | null;
     inventory: Inventory;
+    tags: Tag[] | string[];
+}
+
+export interface Tag {
+    id?: number;
+    tag: string;
+    company_id?: number;
 }
 
 export interface Order extends order{

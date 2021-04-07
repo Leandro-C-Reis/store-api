@@ -1,6 +1,7 @@
 import {Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToOne, OneToMany} from "typeorm";
 import ProductInventory from "./ProductInventory";
 import ProductsOrders from "./ProductsOrders";
+import Tags from "./Tags";
 
 @Entity('products')
 export default class Products {
@@ -27,4 +28,7 @@ export default class Products {
 
     @OneToMany(() => ProductsOrders, productsOrders => productsOrders.product)
     orders: ProductsOrders[];
+
+    @OneToMany(() => Tags, tags => tags.product)
+    tags: [Tags];
 }
