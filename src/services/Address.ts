@@ -23,7 +23,10 @@ export default class Address extends IService{
         
         params.created_at = this.timestamps();
         
-        return await addresses.create(params);
+        const created = await addresses.create(params);
+        const address = await addresses.getOne(this.getId(created));
+
+        return address;
     }
 
     public static async update(params: any, id: number)
@@ -31,8 +34,11 @@ export default class Address extends IService{
         const addresses = new AddressRepository();
 
         params.updated_at = this.timestamps();
+    
+        await addresses.update(params, id);
+        const address = await addresses.getOne(id);
 
-        return await addresses.update(params, id);
+        return address;
     }
 
     public static async delete(id: number)

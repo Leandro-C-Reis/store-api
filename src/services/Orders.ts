@@ -37,8 +37,8 @@ export default class Orders extends IService{
         params.created_at = this.timestamps();
         
         // create order and get id;
-        const order = await orders.create(params);
-        const order_id = order.raw.insertId;
+        const created = await orders.create(params);
+        const order_id = this.getId(created);
     
         // create relationship and update inventory
         for await (let product of products)
@@ -57,7 +57,7 @@ export default class Orders extends IService{
             }, product.id);
         }
         
-        return order;
+        return orders.getOne(order_id);
     }
 
     public static async update(params: any, id: number)
@@ -66,7 +66,10 @@ export default class Orders extends IService{
 
         params.updated_at = this.timestamps();
 
-        return await orders.update(params, id);
+        await orders.update(params, id);
+        const order = await orders.getOne(id);
+
+        return order;
     }
 
     public static async delete(id: number)

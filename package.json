@@ -5,9 +5,15 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev src/server.ts --unhandled-rejections=strict --transpile-only --ignore-watch node-modules",
+    "start": "ts-node src/server.ts --transpile-only --ignore-watch node-modules",
     "typeorm": "ts-node ./node_modules/typeorm/cli.js",
     "test": "jest --detectOpenHandles",
-    "migrate": "ts-node src/database/migrate.ts"
+    "migrate": "ts-node src/database/migrate.ts",
+
+    "postinstall": "tsc",
+    "watch-node": "nodemon dist/index.js",
+    "watch-ts": "tsc -w",
+    "deploy": "git add . && git commit -m Heroku && git push heroku master"
   },
   "repository": {
     "type": "git",

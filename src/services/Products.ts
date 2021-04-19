@@ -37,7 +37,10 @@ export default class Products extends IService {
 
         params.created_at = this.timestamps();
 
-        return await products.create(params);
+        const created = await products.create(params);
+        const product = await products.getOne(this.getId(created));
+
+        return product;
     }
 
     public static async update(params: any, id: number)
@@ -46,7 +49,10 @@ export default class Products extends IService {
 
         params.updated_at = this.timestamps();
 
-        return await products.update(params, id);
+        await products.update(params, id);
+        const product = await products.getOne(id);
+
+        return product;
     }
 
     public static async delete(id: number)

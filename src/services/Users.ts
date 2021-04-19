@@ -26,8 +26,11 @@ export default class Users extends IService{
         
         params.password = password_hashed;
         params.created_at = this.timestamps();
-        
-        return await users.create(params);
+
+        const created = await users.create(params);
+        const user = await users.getOne(this.getId(created));
+
+        return user;
     }
 
     public static async update(params: any, id: number)
@@ -40,8 +43,10 @@ export default class Users extends IService{
         params.updated_at = this.timestamps();
 
         const users = new UsersRepository();
+        await users.update(params, id);
+        const user = await users.getOne(id);
 
-        return await users.update(params, id);
+        return user;
     }
 
     public static async delete(id: number)
