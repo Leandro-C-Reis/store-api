@@ -1,4 +1,4 @@
-import {MigrationInterface, QueryRunner, Table} from "typeorm";
+import { MigrationInterface, QueryRunner, Table } from "typeorm";
 
 export class PruductInventory1615391511916 implements MigrationInterface {
 
@@ -29,12 +29,12 @@ export class PruductInventory1615391511916 implements MigrationInterface {
                 {
                     name: 'created_at',
                     type: 'timestamp',
-                    isNullable: true
+                    default: 'now()'
                 },
                 {
                     name: 'updated_at',
                     type: 'timestamp',
-                    isNullable: true
+                    default: 'now()'
                 }
             ],
 

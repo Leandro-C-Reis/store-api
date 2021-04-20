@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToOne} from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToOne, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import User from './Users';
 import Order from './Orders';
 
@@ -16,13 +16,13 @@ export default class Address {
 
     @OneToOne(() => Order, order => order.address)
     order: Order;
-    
+
     @Column()
     zip_code: string;
-    
+
     @Column()
     city: string;
-    
+
     @Column()
     street: string;
 
@@ -30,5 +30,11 @@ export default class Address {
     district: string;
 
     @Column()
-    uf: string
+    uf: string;
+
+    @CreateDateColumn()
+    created_at: Date;
+
+    @UpdateDateColumn()
+    updated_at: Date;
 }

@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn} from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import Products from "./Products";
 
 @Entity('tags')
@@ -15,4 +15,10 @@ export default class Tags {
     @OneToOne(() => Products, product => product.tags)
     @JoinColumn({ name: 'product_id' })
     product: Products;
+
+    @CreateDateColumn()
+    created_at: Date;
+
+    @UpdateDateColumn()
+    updated_at: Date;
 }

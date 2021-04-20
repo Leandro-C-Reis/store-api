@@ -1,7 +1,6 @@
 import connection from '../database/connection';
 
-async function load()
-{
+async function load() {
     await connection();
 }
 

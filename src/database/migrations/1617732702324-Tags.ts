@@ -1,4 +1,4 @@
-import {MigrationInterface, QueryRunner, Table} from "typeorm";
+import { MigrationInterface, QueryRunner, Table } from "typeorm";
 
 export class Tags1617732702324 implements MigrationInterface {
 
@@ -23,6 +23,16 @@ export class Tags1617732702324 implements MigrationInterface {
                     name: 'product_id',
                     type: 'bigint',
                     unsigned: true,
+                },
+                {
+                    name: 'created_at',
+                    type: 'timestamp',
+                    default: 'now()'
+                },
+                {
+                    name: 'updated_at',
+                    type: 'timestamp',
+                    default: 'now()'
                 }
             ],
             foreignKeys: [

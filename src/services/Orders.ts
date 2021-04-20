@@ -5,50 +5,44 @@ import InventoryRepository from '../database/repositories/ProductInventoryReposi
 import IService from './IService';
 import * as Types from '../types/types';
 
-export default class Orders extends IService{
+export default class Orders extends IService {
 
-    public static async getAll()
-    {
+    public static async getAll() {
         const orders = new OrdersRepository();
 
         return await orders.getAll();
     }
 
-    public static async getOne(id: number)
-    {
+    public static async getOne(id: number) {
         const orders = new OrdersRepository();
 
         const order: Types.Order = await orders.getOne(id);
         return order;
     }
 
-    public static async create(params: Types.order) 
-    {
+    public static async create(params: Types.order) {
         // instance objects
-        const orders         = new OrdersRepository();
+        const orders = new OrdersRepository();
         const productsOrders = new ProductsOrdersRepository();
-        const inventory      = new InventoryRepository();
-        const productRepo    = new ProductsRepository();
+        const inventory = new InventoryRepository();
+        const productRepo = new ProductsRepository();
 
         // extract object
         const products: [Types.product] | [] = params.products || [];
         delete params.products;
-        
-        params.created_at = this.timestamps();
-        
+
         // create order and get id;
         const created = await orders.create(params);
         const order_id = this.getId(created);
-    
+
         // create relationship and update inventory
-        for await (let product of products)
-        {
+        for await (let product of products) {
             await productsOrders.create({
                 order_id,
                 product_id: product.id,
                 amount: product.amount,
             });
-            
+
             console.log('aqui')
             const PRODUCT: Types.Product = await productRepo.getOne(product.id);
 
@@ -56,15 +50,12 @@ export default class Orders extends IService{
                 amount: PRODUCT.inventory.amount - product.amount
             }, product.id);
         }
-        
+
         return orders.getOne(order_id);
     }
 
-    public static async update(params: any, id: number)
-    {
+    public static async update(params: any, id: number) {
         const orders = new OrdersRepository();
-
-        params.updated_at = this.timestamps();
 
         await orders.update(params, id);
         const order = await orders.getOne(id);
@@ -72,23 +63,19 @@ export default class Orders extends IService{
         return order;
     }
 
-    public static async delete(id: number)
-    {
+    public static async delete(id: number) {
         const orders = new OrdersRepository();
 
         return await orders.delete(id);
     }
 
-    public static async existProducts(products: [Types.product])
-    {
+    public static async existProducts(products: [Types.product]) {
         const Repo = new ProductsRepository();
 
-        for await (const product of products)
-        {
+        for await (const product of products) {
             const find = await Repo.getOne(product.id);
-            
-            if (!find)
-            {
+
+            if (!find) {
                 return false;
             }
         }
@@ -96,18 +83,15 @@ export default class Orders extends IService{
         return true;
     }
 
-    public static async validateQuantity(products: [Types.product])
-    {
+    public static async validateQuantity(products: [Types.product]) {
         const Repo = new ProductsRepository();
 
         const errors = [];
 
-        for await (const req of products)
-        {
+        for await (const req of products) {
             const product: Types.Product = await Repo.getOne(req.id);
 
-            if (req.amount > product.inventory.amount)
-            {
+            if (req.amount > product.inventory.amount) {
                 errors.push(req);
             }
         }
@@ -115,31 +99,27 @@ export default class Orders extends IService{
         return errors;
     }
 
-    public static async cancelOrder(id: number)
-    {
-        const orders         = new OrdersRepository();
-        const inventory      = new InventoryRepository();
-        
+    public static async cancelOrder(id: number) {
+        const orders = new OrdersRepository();
+        const inventory = new InventoryRepository();
+
         const order: Types.Order = await orders.getOne(id);
-        
-        for await(const productOrder of order.products)
-        {
+
+        for await (const productOrder of order.products) {
             const productInventory: Types.Inventory = await inventory.getByProductId(productOrder.product.id);
             await inventory.update({ amount: productOrder.amount + productInventory.amount }, productOrder.product.id);
         }
 
-        await orders.update({ is_active: false, updated_at: this.timestamps() }, id);
+        await orders.update({ is_active: false }, id);
     }
 
-    public static async getAllActives()
-    {
+    public static async getAllActives() {
         const orders = new OrdersRepository();
-        
+
         return await orders.getAllActives();
     }
 
-    public static async getByUser(id: number)
-    {
+    public static async getByUser(id: number) {
         const orders = new OrdersRepository();
 
         return await orders.getByUser(id);

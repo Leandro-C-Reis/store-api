@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, JoinColumn, OneToOne, OneToMany} from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, OneToOne, OneToMany, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import Address from './Addresses';
 import ProductsOrders from "./ProductsOrders";
 import User from './Users';
@@ -10,7 +10,7 @@ export default class Orders {
 
     @Column()
     address_id: number;
-    
+
     @Column()
     user_id: number
 
@@ -24,16 +24,16 @@ export default class Orders {
 
     @OneToMany(() => ProductsOrders, productsOrders => productsOrders.order)
     products: ProductsOrders[];
-    
+
     @Column()
     total_value: number;
 
     @Column()
     is_active: boolean;
 
-    @Column()
-    created_at: string;
+    @CreateDateColumn()
+    created_at: Date;
 
-    @Column()
-    updated_at: string;
+    @UpdateDateColumn()
+    updated_at: Date;
 }

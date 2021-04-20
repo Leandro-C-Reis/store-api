@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, Index, CreateDateColumn, UpdateDateColumn, OneToMany} from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, Index, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
 import Address from './Addresses';
 import Order from './Orders';
 
@@ -24,8 +24,8 @@ export default class Users {
     orders: Order[];
 
     @CreateDateColumn()
-    created_at: string;
+    created_at: Date;
 
     @UpdateDateColumn()
-    updated_at: string;
+    updated_at: Date;
 }

@@ -5,7 +5,7 @@ import path from 'path';
 const connection = async () => {
     const modelsDir = path.resolve(__dirname, '..', 'database', 'models');
     const migrationsDir = path.resolve(__dirname, '..', 'database', 'migrations');
-    
+
     const connect = await createConnection({
         type: 'mysql',
         host: variables.db_host,
@@ -21,14 +21,13 @@ const connection = async () => {
         }
     });
 
-    if (!connect.isConnected)
-    {
+    if (!connect.isConnected) {
         process.exit(1);
     }
-    
+
     console.log('ORM connection established');
-    
+
     return connect;
-}   
+}
 
 export default connection;

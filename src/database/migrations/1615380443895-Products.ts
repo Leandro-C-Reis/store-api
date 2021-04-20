@@ -1,4 +1,4 @@
-import {MigrationInterface, QueryRunner, Table} from "typeorm";
+import { MigrationInterface, QueryRunner, Table } from "typeorm";
 
 export class Products1615380443895 implements MigrationInterface {
 
@@ -31,12 +31,12 @@ export class Products1615380443895 implements MigrationInterface {
                 {
                     name: 'created_at',
                     type: 'timestamp',
-                    isNullable: true
+                    default: 'now()'
                 },
                 {
                     name: 'updated_at',
                     type: 'timestamp',
-                    isNullable: true
+                    default: 'now()'
                 }
             ]
         }));

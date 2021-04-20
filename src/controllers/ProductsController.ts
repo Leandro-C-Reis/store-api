@@ -3,20 +3,17 @@ import Products from '../services/Products';
 import Joi from 'joi';
 export default class ProductsController {
 
-    public static async index(request: Request, response: Response)
-    {
+    public static async index(request: Request, response: Response) {
         const products = await Products.getAll();
 
         return response.json(products);
     }
 
-    public static async show(request: Request, response: Response)
-    {
+    public static async show(request: Request, response: Response) {
         const id = parseInt(request.params.id);
         const { filter } = request.query;
 
-        if (!id)
-        {
+        if (!id) {
             return response.json({ error: "ID inválido!" });
         }
 
@@ -25,8 +22,7 @@ export default class ProductsController {
         return response.json(product);
     }
 
-    public static async create(request: Request, response: Response)
-    {
+    public static async create(request: Request, response: Response) {
         delete request.body.user;
 
         const schema = Joi.object({
@@ -40,28 +36,25 @@ export default class ProductsController {
         });
 
         const validate = schema.validate(request.body)
-        
-        if (validate.error)
-        {
+
+        if (validate.error) {
             return response.json(validate.error);
         }
-        
+
         const product = await Products.create(request.body);
-        const id = product.raw.insertId;
+        const id = product.id;
         const inventory = await Products.createInventory(id, request.body.inventory);
         const tags = await Products.createTags(id, request.body.tags);
 
-        return response.json({product, inventory, tags});
+        return response.json({ product, inventory, tags });
     }
 
-    public static async update(request: Request, response: Response)
-    {
+    public static async update(request: Request, response: Response) {
         delete request.body.user;
 
         const id = parseInt(request.params.id);
 
-        if (!id)
-        {
+        if (!id) {
             return response.json({ error: "ID inválido!" });
         }
 
@@ -77,23 +70,20 @@ export default class ProductsController {
         });
 
         const validate = schema.validate(request.body)
-        
-        if (validate.error)
-        {
+
+        if (validate.error) {
             return response.json(validate.error);
         }
-        
+
         // Update inventory if exist
-        if (request.body.inventory)
-        {
+        if (request.body.inventory) {
             await Products.updateInventory(id, request.body.inventory);
-            
+
             delete request.body.inventory;
         }
 
         // Update tags if exists
-        if (request.body.tags)
-        {
+        if (request.body.tags) {
             await Products.updateTags(id, request.body.tags);
 
             delete request.body.tags;
@@ -105,12 +95,10 @@ export default class ProductsController {
         return response.json(updated);
     }
 
-    public static async delete(request: Request, response: Response)
-    {
+    public static async delete(request: Request, response: Response) {
         const id = parseInt(request.params.id);
 
-        if (!id)
-        {
+        if (!id) {
             return response.json({ error: "ID inválido!" });
         }
 
@@ -119,14 +107,12 @@ export default class ProductsController {
         return response.json(deleted);
     }
 
-    public static async createTag(request: Request, response: Response)
-    {
+    public static async createTag(request: Request, response: Response) {
         delete request.body.user;
 
         const id = parseInt(request.params.id);
 
-        if (!id)
-        {
+        if (!id) {
             return response.json({ error: "ID inválido!" });
         }
 
@@ -138,8 +124,7 @@ export default class ProductsController {
 
         const validate = schema.validate(request.body);
 
-        if (validate.error)
-        {
+        if (validate.error) {
             return response.json(validate.error);
         }
 

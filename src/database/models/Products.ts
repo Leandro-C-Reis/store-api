@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToOne, OneToMany} from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToOne, OneToMany } from "typeorm";
 import ProductInventory from "./ProductInventory";
 import ProductsOrders from "./ProductsOrders";
 import Tags from "./Tags";
@@ -18,10 +18,10 @@ export default class Products {
     description: string;
 
     @CreateDateColumn()
-    created_at: string;
+    created_at: Date;
 
     @UpdateDateColumn()
-    updated_at: string;
+    updated_at: Date;
 
     @OneToOne(() => ProductInventory, inventory => inventory.product)
     inventory: ProductInventory;

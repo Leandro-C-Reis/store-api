@@ -6,8 +6,7 @@ import Types from '../types/types';
 import ProductsTagsRepository from '../database/repositories/ProductsTagsRepository';
 
 export default class Products extends IService {
-    public static async getAll()
-    {
+    public static async getAll() {
         const Products = new ProductsRepository();
 
         let products = await Products.getAll();
@@ -17,25 +16,20 @@ export default class Products extends IService {
         return products;
     }
 
-    public static async getOne(id: number, filter: any = "true")
-    {
+    public static async getOne(id: number, filter: any = "true") {
         const Products = new ProductsRepository();
 
         const product = await Products.getOne(id);
 
-        if (filter == "true")
-        {
+        if (filter == "true") {
             return this.filterProduct(product);
         }
-        
+
         return product;
     }
 
-    public static async create(params: any)
-    {
+    public static async create(params: any) {
         const products = new ProductsRepository();
-
-        params.created_at = this.timestamps();
 
         const created = await products.create(params);
         const product = await products.getOne(this.getId(created));
@@ -43,11 +37,8 @@ export default class Products extends IService {
         return product;
     }
 
-    public static async update(params: any, id: number)
-    {
+    public static async update(params: any, id: number) {
         const products = new ProductsRepository();
-
-        params.updated_at = this.timestamps();
 
         await products.update(params, id);
         const product = await products.getOne(id);
@@ -55,15 +46,13 @@ export default class Products extends IService {
         return product;
     }
 
-    public static async delete(id: number)
-    {
+    public static async delete(id: number) {
         const products = new ProductsRepository();
 
         return await products.delete(id);
     }
 
-    public static async createInventory(id: number, amount: number = 0)
-    {
+    public static async createInventory(id: number, amount: number = 0) {
         const Inventory = new ProductInventoryRepository();
 
         const inventory = await Inventory.create({
@@ -71,62 +60,58 @@ export default class Products extends IService {
             product: id
         });
 
-        return inventory;
+        const inventoryId = this.getId(inventory);
+
+        return Inventory.getOne(inventoryId);
     }
 
-    public static async updateInventory(id: number, amount: number = 0)
-    {
+    public static async updateInventory(id: number, amount: number = 0) {
         const Inventory = new ProductInventoryRepository();
 
         return await Inventory.update({ amount }, id);
     }
 
-    public static async createTags(product_id: number, tags: [string])
-    {
+    public static async createTags(product_id: number, tags: [string]) {
         const Tags = new ProductsTagsRepository();
 
-        if (!tags)
-        {
+        if (!tags) {
             return;
         }
 
         const create = [];
-        for await (const tag of tags)
-        {
+        for await (const tag of tags) {
             const status = await Tags.create({ product_id, tag });
-            create.push(status);
+            const id = this.getId(status);
+
+            create.push(await Tags.getOne(id));
         }
 
         return create;
     }
 
-    public static async updateTags(product_id: number, tags: [Types.Tag])
-    {
+    public static async updateTags(product_id: number, tags: [Types.Tag]) {
         const Tags = new ProductsTagsRepository();
 
-        for await (const tag of tags)
-        {
+        for await (const tag of tags) {
             const Tag: any = await Tags.getOne(tag.id || 0);
 
             // Conditional to update tag 
-            if (!Tag || Tag.product_id != product_id)
-            {
+            if (!Tag || Tag.product_id != product_id) {
                 continue;
             }
-            
+
             await Tags.update({ tag: tag.tag }, tag.id || 0);
         }
     }
 
-    public static filterProduct(product: Types.Product)
-    {
+    public static filterProduct(product: Types.Product) {
         product.tags = product.tags.map((tag: Types.Tag | any) => {
             delete tag.id;
             delete tag.product_id;
             return tag.tag;
         })
         delete product.inventory.id;
-        
+
         return product;
     }
 }
