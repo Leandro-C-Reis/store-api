@@ -41,6 +41,23 @@ export class Addresses1615474341974 implements MigrationInterface {
                     unsigned: true
                 },
                 {
+                    name: 'number',
+                    type: 'varchar',
+                    length: '15'
+                },
+                {
+                    name: 'complement',
+                    type: 'varchar'
+                },
+                {
+                    name: 'name',
+                    type: 'varchar'
+                },
+                {
+                    name: 'phone',
+                    type: 'varchar'
+                },
+                {
                     name: 'created_at',
                     type: 'timestamp',
                     default: 'now()'
