@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import Products from '../services/Products';
 import Joi from 'joi';
+import { validate as uuid } from 'uuid';
 export default class ProductsController {
 
     public static async index(request: Request, response: Response) {
@@ -10,14 +11,15 @@ export default class ProductsController {
     }
 
     public static async show(request: Request, response: Response) {
-        const id = parseInt(request.params.id);
-        const { filter } = request.query;
+        const id = request.params.id;
 
-        if (!id) {
+        const isValid = uuid(id);
+
+        if (!id || !isValid) {
             return response.json({ error: "ID inválido!" });
         }
 
-        const product = await Products.getOne(id, filter);
+        const product = await Products.getOne(id);
 
         return response.json(product);
     }
@@ -42,19 +44,18 @@ export default class ProductsController {
         }
 
         const product = await Products.create(request.body);
-        const id = product.id;
-        const inventory = await Products.createInventory(id, request.body.inventory);
-        const tags = await Products.createTags(id, request.body.tags);
 
-        return response.json({ product, inventory, tags });
+        return response.json(product);
     }
 
     public static async update(request: Request, response: Response) {
         delete request.body.user;
 
-        const id = parseInt(request.params.id);
+        const id = request.params.id;
 
-        if (!id) {
+        const isValid = uuid(id);
+
+        if (!id || !isValid) {
             return response.json({ error: "ID inválido!" });
         }
 
@@ -75,20 +76,6 @@ export default class ProductsController {
             return response.json(validate.error);
         }
 
-        // Update inventory if exist
-        if (request.body.inventory) {
-            await Products.updateInventory(id, request.body.inventory);
-
-            delete request.body.inventory;
-        }
-
-        // Update tags if exists
-        if (request.body.tags) {
-            await Products.updateTags(id, request.body.tags);
-
-            delete request.body.tags;
-        }
-
         // Update product details
         const updated = await Products.update(request.body, id);
 
@@ -96,40 +83,16 @@ export default class ProductsController {
     }
 
     public static async delete(request: Request, response: Response) {
-        const id = parseInt(request.params.id);
+        const id = request.params.id;
 
-        if (!id) {
+        const isValid = uuid(id);
+
+        if (!id || !isValid) {
             return response.json({ error: "ID inválido!" });
         }
 
         const deleted = await Products.delete(id);
 
         return response.json(deleted);
-    }
-
-    public static async createTag(request: Request, response: Response) {
-        delete request.body.user;
-
-        const id = parseInt(request.params.id);
-
-        if (!id) {
-            return response.json({ error: "ID inválido!" });
-        }
-
-        const schema = Joi.object({
-            tags: Joi.array().items(
-                Joi.string().max(100).required()
-            ).required()
-        });
-
-        const validate = schema.validate(request.body);
-
-        if (validate.error) {
-            return response.json(validate.error);
-        }
-
-        const create = await Products.createTags(id, request.body.tags);
-
-        return response.json(create);
     }
 }

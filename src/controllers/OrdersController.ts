@@ -26,6 +26,7 @@ export default class OrdersController {
         return response.json(orders);
     }
 
+    // TO-DO CREATE and UPDATE
     public static async create(request: Request, response: Response)
     {
         delete request.body.user;
@@ -47,35 +48,35 @@ export default class OrdersController {
             return response.json(validate.error);
         }
         
-        const existProducts = await OrdersService.existProducts(request.body.products);
+        // const existProducts = await OrdersService.existProducts(request.body.products);
 
-        if (!existProducts)
-        {
-            return response.json({ Error: 'Erro ao buscar produto.' })
-        }
+        // // if (!existProducts)
+        // // {
+        // //     return response.json({ Error: 'Erro ao buscar produto.' })
+        // // }
 
-        const validateQuantity = await OrdersService.validateQuantity(request.body.products);
+        // const validateQuantity = await OrdersService.validateQuantity(request.body.products);
 
-        if (validateQuantity.length > 0)
-        {
-            return response.json({ 
-                Error: 'Estoque indisponível!',
-                products: validateQuantity
-            });
-        }
+        // // if (validateQuantity.length > 0)
+        // // {
+        // //     return response.json({ 
+        // //         Error: 'Estoque indisponível!',
+        // //         products: validateQuantity
+        // //     });
+        // // }
 
-        const validateAddress = await AddressService.validate(request.body.address_id);
+        // const validateAddress = await AddressService.validate(request.body.address_id);
         
-        if (!validateAddress)
-        {
-            return response.json({ Error: "Endereço não encontrado!" });
-        }
+        // if (!validateAddress)
+        // {
+        //     return response.json({ Error: "Endereço não encontrado!" });
+        // }
 
         const created = await OrdersService.create(request.body);
 
         return response.json(created);
     }
-
+    
     public static async update(request: Request, response: Response)
     {
         delete request.body.user;
@@ -104,22 +105,22 @@ export default class OrdersController {
             return response.json(validate.error);
         }
 
-        const existProducts = await OrdersService.existProducts(request.body.products);
+        // const existProducts = await OrdersService.existProducts(request.body.products);
 
-        if (!existProducts)
-        {
-            return response.json({ ERROR: 'Erro ao buscar produto.' })
-        }
+        // if (!existProducts)
+        // {
+        //     return response.json({ ERROR: 'Erro ao buscar produto.' })
+        // }
 
-        const validateQuantity = await OrdersService.validateQuantity(request.body.products);
+        // const validateQuantity = await OrdersService.validateQuantity(request.body.products);
 
-        if (validateQuantity.length > 0)
-        {
-            return response.json({ 
-                Error: 'Estoque indisponível!',
-                products: validateQuantity
-            });
-        }
+        // if (validateQuantity.length > 0)
+        // {
+        //     return response.json({ 
+        //         Error: 'Estoque indisponível!',
+        //         products: validateQuantity
+        //     });
+        // }
 
         const updated = await OrdersService.update(request.body, id);
 
@@ -149,18 +150,6 @@ export default class OrdersController {
             return response.json({ error: "ID inválido!" });
         }
 
-        const find = await OrdersService.getOne(id);
-
-        if (!find)
-        {
-            return response.json({ Error: "Pedido não encontrado!" });
-        }
-
-        if (!find.is_active)
-        {
-            return response.json({ Error: "Pedido já foi cancelado!" });
-        }
-
         await OrdersService.cancelOrder(id);
 
         return response.json({ message: 'Pedido cancelado!' });
@@ -173,7 +162,7 @@ export default class OrdersController {
         return response.json(orders);
     }
 
-    public static async user(request: Request, response: Response)
+    public static async getByUser(request: Request, response: Response)
     {
         const id = parseInt(request.params.id);
 

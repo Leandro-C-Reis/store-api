@@ -3,8 +3,8 @@ import * as variables from '../config/variables';
 import path from 'path';
 
 const connection = async () => {
-    const modelsDir = path.resolve(__dirname, '..', 'database', 'models');
-    const migrationsDir = path.resolve(__dirname, '..', 'database', 'migrations');
+    const modelsDir = path.resolve(__dirname, '..', 'models');
+    const migrationsDir = path.resolve(__dirname, '..', 'migrations');
 
     const connect = await createConnection({
         type: 'mysql',

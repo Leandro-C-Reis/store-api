@@ -1,57 +1,70 @@
-import UsersRepository from '../database/repositories/UsersRepository';
 import { password_hash, password_verify } from 'nodejs-password';
-import IService from './IService';
+import { getCustomRepository } from 'typeorm';
+import UsersRepository from '../repositories/UsersRepository';
 
-export default class Users extends IService {
+export default class Users {
 
     public static async getAll() {
-        const users = new UsersRepository();
+       const usersRepo = getCustomRepository(UsersRepository);
 
-        return await users.getAll();
+       const users = await usersRepo.find();
+
+       return users;
     }
 
     public static async getOne(id: number) {
-        const users = new UsersRepository();
+        const usersRepo = getCustomRepository(UsersRepository);
 
-        return await users.getOne(id);
-    }
-
-    public static async create(params: any) {
-        const users = new UsersRepository();
-
-        const password_hashed = await password_hash(params.password);
-
-        params.password = password_hashed;
-
-        const created = await users.create(params);
-        const user = await users.getOne(this.getId(created));
+        const user = await usersRepo.findOne({
+            id
+        });
 
         return user;
     }
 
-    public static async update(params: any, id: number) {
-        if (params.password) {
-            params.password = await password_hash(params.password);
+    public static async create(data: any) {
+        const usersRepo = getCustomRepository(UsersRepository);
+
+        const password_hashed = await password_hash(data.password);
+        data.password = password_hashed;
+
+        const user = await usersRepo.save(data);
+
+        return user;
+    }
+
+    public static async update(data: any, id: number) {
+        const usersRepo = getCustomRepository(UsersRepository);
+
+        if (data.password) {
+            data.password = await password_hash(data.password);
         }
 
-        const users = new UsersRepository();
-        await users.update(params, id);
-        const user = await users.getOne(id);
+        const user = await usersRepo.update({
+            id
+        }, data);
 
         return user;
     }
 
     public static async delete(id: number) {
-        const users = new UsersRepository();
+       const usersRepo = getCustomRepository(UsersRepository);
+       
+       const deleted = await usersRepo.delete({
+            id
+       });
 
-        return await users.delete(id);
+       return deleted;
     }
 
     public static async verifyCredentials(email: string, password: string) {
-        const users = new UsersRepository();
-        const user = await users.getByEmail(email);
+        const usersRepo = getCustomRepository(UsersRepository);
+        const user = await usersRepo.findOne({ email }, {
+            select: ['email', 'password']
+        });
+        
 
-        if (!user?.id) {
+        if (!user) {
             return false;
         }
 
@@ -61,19 +74,13 @@ export default class Users extends IService {
             return false;
         }
 
-        delete user.password;
-
-        return user;
+        return true;
     }
 
     public static async exists(email: string) {
-        const Users = new UsersRepository();
-        const user = await Users.getByEmail(email);
+        const usersRepo = getCustomRepository(UsersRepository);
+        const user = await usersRepo.findOne({ email });
 
-        if (!user?.id) {
-            return false;
-        }
-
-        return true;
+        return user;
     }
 }

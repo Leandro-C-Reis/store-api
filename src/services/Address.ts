@@ -1,53 +1,40 @@
-import AddressRepository from '../database/repositories/AddressRepository';
-import IService from './IService';
+import { getCustomRepository } from "typeorm";
+import AddressRepository from "../repositories/AddressesRepository";
 
-export default class Address extends IService {
+export default class Addresses {
 
     public static async getAll() {
-        const addresses = new AddressRepository();
+        const addressRepo = getCustomRepository(AddressRepository);
+        const addresses = await addressRepo.find();
 
-        return await addresses.getAll();
+        return addresses;
     }
 
     public static async getOne(id: number) {
-        const addresses = new AddressRepository();
-
-        return await addresses.getOne(id);
-    }
-
-    public static async create(params: any) {
-        const addresses = new AddressRepository();
-
-        const created = await addresses.create(params);
-        const address = await addresses.getOne(this.getId(created));
+        const addressRepo = getCustomRepository(AddressRepository);
+        const address = await addressRepo.findOne({ id });
 
         return address;
     }
 
-    public static async update(params: any, id: number) {
-        const addresses = new AddressRepository();
+    public static async create(data: any) {
+        const addressRepo = getCustomRepository(AddressRepository);
+        const address = await addressRepo.save(data);
 
-        await addresses.update(params, id);
-        const address = await addresses.getOne(id);
+        return address;
+    }
+
+    public static async update(data: any, id: number) {
+        const addressRepo = getCustomRepository(AddressRepository);
+        const address = await addressRepo.update({ id }, data);
 
         return address;
     }
 
     public static async delete(id: number) {
-        const addresses = new AddressRepository();
+        const addressRepo = getCustomRepository(AddressRepository);
+        const deleted = await addressRepo.delete({ id });
 
-        return await addresses.delete(id);
-    }
-
-    public static async validate(id: number) {
-        const addresses = new AddressRepository();
-
-        const find = await addresses.getOne(id);
-
-        if (!find) {
-            return false;
-        }
-
-        return true;
+        return deleted;
     }
 }

@@ -10,6 +10,8 @@ export const db_port = parseInt(process.env.DB_PORT || '');
 export const db_name = process.env.DB_NAME;
 export const db_user = process.env.DB_USER;
 export const db_password = process.env.DB_PASSWORD;
+export const mongo_db = process.env.MONGO_DB;
+export const mongo_uri = process.env.MONGO_URI;
 
 export const jwt_secret = process.env.JWT_SECRET || 'SECRET';
 

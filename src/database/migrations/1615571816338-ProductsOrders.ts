@@ -16,8 +16,7 @@ export class ProductsOrders1615571816338 implements MigrationInterface {
                 },
                 {
                     name: 'product_id',
-                    type: 'bigint',
-                    unsigned: true
+                    type: 'uuid'
                 },
                 {
                     name: 'order_id',
@@ -32,13 +31,6 @@ export class ProductsOrders1615571816338 implements MigrationInterface {
             ],
 
             foreignKeys: [
-                {
-                    columnNames: ['product_id'],
-                    referencedTableName: 'products',
-                    referencedColumnNames: ['id'],
-                    onDelete: 'cascade',
-                    onUpdate: 'cascade'
-                },
                 {
                     columnNames: ['order_id'],
                     referencedTableName: 'orders',

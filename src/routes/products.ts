@@ -10,6 +10,5 @@ router.get('/:id', ProductsController.show);
 router.post('/', ProductsController.create);
 router.post('/:id', ProductsController.update);
 router.delete('/delete/:id', ProductsController.delete);
-router.post('/tags/:id', ProductsController.createTag)
 
 export default router;
