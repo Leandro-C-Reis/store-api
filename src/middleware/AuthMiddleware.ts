@@ -1,39 +1,39 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import Users from '../services/Users';
+import { jwt_secret } from '../config/variables';
+
+interface Verify {
+    user: {
+        id: string;
+        name: string;
+        email: string;
+        created_at: string;
+        updated_at: string;
+    }
+    iat: number;
+    exp: number;
+}
 
 export default class AuthMiddleware {
 
     public static async authenticate(request: Request, response: Response, next: NextFunction)
     {
-        const token = typeof request.headers.token == 'string' ? 
-            request.headers.token : '';
-
-        if (!token)
-        {
-            return response.status(200).json({ message: 'O Token de acesso não foi recebido!'});
-        }
-
-        let id: number = 0;
-        let error: any;
-
-        jwt.verify(token, 'SECRET', (err: any, decoded: any) => {
-            if (err)
-            {
-                return error = err;
-            }
-
-            return id = decoded.user.id;
-        });
-
-        if (!id)
-        {
-            return response.status(200).json({ message: error.message });
-        }
-    
-        const user = await Users.getOne(id);
+        const { token } = request.headers;
         
-        request.body.user = user;
-        next();
+        if (!token) {
+            return response.json({ message: "Token de acesso não recebido!" });
+        }
+
+        try {
+            const verify = jwt.verify(token.toString(), jwt_secret);
+            const user = (verify as Verify).user;
+            
+            request.body.user = user;
+            next();
+        } 
+        catch (err) {
+            
+            return response.json(err);
+        }
     }
-}
+} 

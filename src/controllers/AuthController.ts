@@ -11,12 +11,14 @@ export default class AuthController {
 
         const { email, password } = request.body;
         
-        const user = await UserService.verifyCredentials(email, password);
+        const validate = await UserService.verifyCredentials(email, password);
 
-        if (!user)
+        if (!validate)
         {
             return response.status(200).json({ message: 'Email ou senha inválido!'});
         }
+
+        const user = await UserService.getOneByEmail(email);
 
         const token = jwt.sign({ user }, VAR.jwt_secret, {
             expiresIn: ExpiresIn

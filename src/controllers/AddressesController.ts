@@ -33,9 +33,13 @@ export default class AddressController {
             zip_code: Joi.string().required().length(8),
             city: Joi.string().required(),
             street: Joi.string().required(),
-            district: Joi.string().required(),  
+            district: Joi.string().required(),
             uf: Joi.string().required().length(2),
-            user_id : Joi.number().required().integer()
+            user_id : Joi.number().required().integer(),
+            number: Joi.string().required(),
+            complement: Joi.string().required(),
+            name: Joi.string().required(),
+            phone: Joi.string().required()
         });
 
         const validate = schema.validate(request.body);
@@ -65,9 +69,13 @@ export default class AddressController {
             zip_code: Joi.string().length(8),
             city: Joi.string(),
             street: Joi.string(),
-            district: Joi.string(),  
+            district: Joi.string(),
             uf: Joi.string().length(2),
-            user_id : Joi.number().integer()
+            user_id : Joi.number().integer(),
+            number: Joi.string(),
+            complement: Joi.string(),
+            name: Joi.string(),
+            phone: Joi.string()
         });
 
         const validate = schema.validate(request.body);

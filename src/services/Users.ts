@@ -29,7 +29,7 @@ export default class Users {
         data.password = password_hashed;
 
         const user = await usersRepo.save(data);
-
+    
         return user;
     }
 
@@ -80,6 +80,16 @@ export default class Users {
     public static async exists(email: string) {
         const usersRepo = getCustomRepository(UsersRepository);
         const user = await usersRepo.findOne({ email });
+
+        return user;
+    }
+
+    public static async getOneByEmail(email: string)
+    {
+        const usersRepo = getCustomRepository(UsersRepository);
+        const user = await usersRepo.findOne({
+            email
+        });
 
         return user;
     }

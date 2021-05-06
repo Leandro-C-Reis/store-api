@@ -4,7 +4,7 @@ import path from 'path';
 
 const connection = async () => {
     const modelsDir = path.resolve(__dirname, '..', 'models');
-    const migrationsDir = path.resolve(__dirname, '..', 'migrations');
+    const migrationsDir = path.resolve(__dirname, './', 'migrations');
 
     const connect = await createConnection({
         type: 'mysql',
